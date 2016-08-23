@@ -62,10 +62,10 @@ class Submit(Handler):
     """
         Handles the submission
     """
-    def get(self):
+    def post(self):
         username = self.request.get('username')
         password = self.request.get('password')
-        confirm = self.request.get('confirm')
+        verify = self.request.get('verify')
         email = self.request.get('email')
         errors = False
         errorName = ""
@@ -89,7 +89,7 @@ class Submit(Handler):
         if len(password) > 20:
             errors = True
             errorPass += "<br>Whoa!  That's too long.  We can't write all that down when you're not looking!!"
-        if password != confirm:
+        if password != verify:
             errors = True
             errorPass += "<br>Your password does not match the confirmation. <br>We're not sure which one to steal!!"
         if validEmail(email) == False and email != '':

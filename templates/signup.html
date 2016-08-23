@@ -2,7 +2,7 @@
 
 {% block content %}
 <!get is more fun because it displays the password loud and clear>
-<form action="/submit" method="get"> 
+<form action="/submit" method="post"> 
     <div >
     
     <label>UserName:    </label>
@@ -13,8 +13,8 @@
     <input type='password' name="password" value="" ><div class="errors">{{errorPass}}</div></input>  
     <br>
     
-    <label>Confirm Password:    </label>
-    <input type='password' name='confirm' value=""></input>
+    <label>Verify Password:    </label>
+    <input type='password' name='verify' value=""></input>
     <br>
     
     <label>Email:    </label>
