@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!get is more fun because it displays the password loud and clear>
+<form action="/submit" method="get"> 
+    <div >
+    
+    <label>UserName:    </label>
+    <input name='username' value={{username}}><div class="errors">{{errorName}}</div></input>
+    <br>
+    
+    <label>Password:    </label>
+    <input type='password' name="password" value="" ><div class="errors">{{errorPass}}</div></input>  
+    <br>
+    
+    <label>Confirm Password:    </label>
+    <input type='password' name='confirm' value=""></input>
+    <br>
+    
+    <label>Email:    </label>
+    <input name='email' value={{email}}><div class="errors">{{errorEmail}}</div></input>
+    <br>
+    
+    </div>
+    <br>
+    <button>Submit</button>
+    
+</form>
+<img src="http://www.puppiesinflorida.com/wp-content/uploads/2016/07/Puppies_for_sale_in_florida.jpg"/>
+
+
+
+{% endblock %}
