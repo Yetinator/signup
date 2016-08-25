@@ -2,32 +2,31 @@
 import os 
 import webapp2
 import jinja2
+import re
 
 template_dir=os.path.join(os.path.dirname(__file__), 'templates')#creates a path
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir))#assigns path to
 
-def hasSpace(name):
-    for i in name:
-        if i == " ":
-            return True
-    return False
+def userfunction(username):
+    """
+        This function returns false if there is a problem with the name.
+    """
+    USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
+    return USER_RE.match(username)  
 
-def validEmail(email):
-    """
-        @ must exist, and before dot(.)
-        length of at least 3??
-    """
-    atExist = False
-    dotExist = False
-    if len(email) < 3:
+def passwordfunction(password, verify):
+    PASS_RE = re.compile(r"^.{3,20}$")
+    if password == verify:
+        return PASS_RE.match(password)
+    else:
         return False
-    for i in range(len(email)):
-        if email[i] == "@":
-            for j in range(i,len(email)):
-                if email[j] == ".":
-                    return True
-            return False
-    return False 
+    
+def emailfunction(email):
+    EMAIL_RE = re.compile(r"^[\S]+@[\S]+.[\S]+$")
+    if email == '':
+        return True
+    return EMAIL_RE.match(email)
+
 
 class Handler(webapp2.RequestHandler):
     def write(self, *a, **kw):
@@ -71,31 +70,18 @@ class Submit(Handler):
         errorName = ""
         errorPass = ""
         errorEmail = ""
-        if username == '':
-            errorName += "We can't steal your identity without a Username. <br> Please enter a Username now."
+        if not (userfunction(username)):
+            errorName += "There is an error with the name somehow. "
             errors = True
-        if hasSpace(username):
-            errorName += "<br>Your Username cannot have a space."
+        
+        if not (passwordfunction(password, verify)):
             errors = True
-        if (len(username) < 3 or len(username) > 15) and username != '':
-            errorName += "<br>Your Username is too long, too short, or stupid"
-            errors = True
-        if password == '':
-            errors = True
-            errorPass += "You did not enter a password.  <br>Please do that now."
-        if len(password) < 5 and password != '':
-            errors = True
-            errorPass += "Your password doesn't seem secure enough.<br> We're stealing it anyway, but we would like you to enter a longer password"
-        if len(password) > 20:
-            errors = True
-            errorPass += "<br>Whoa!  That's too long.  We can't write all that down when you're not looking!!"
-        if password != verify:
-            errors = True
-            errorPass += "<br>Your password does not match the confirmation. <br>We're not sure which one to steal!!"
-        if validEmail(email) == False and email != '':
+            errorPass += "There is an error with your password somehow"
+        
+        if not (emailfunction(email)):
             errors = True
             errorEmail = "Your email is just wrong"
-        
+      
         if errors == True:
             self.render("signup.html", username=username, email=email, errorName = errorName, errorPass=errorPass, errorEmail=errorEmail)
         else:
